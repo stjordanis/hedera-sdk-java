@@ -3,7 +3,8 @@ package com.hedera.hashgraph.sdk;
 import com.google.protobuf.ByteString;
 import com.hedera.hashgraph.sdk.proto.FileUpdateTransactionBody;
 import com.hedera.hashgraph.sdk.proto.TransactionBody;
-import org.threeten.bp.Instant;
+
+import java.time.Instant;
 
 public final class FileUpdateTransaction extends TransactionBuilder<FileUpdateTransaction> {
     private final FileUpdateTransactionBody.Builder builder;
@@ -35,7 +36,7 @@ public final class FileUpdateTransaction extends TransactionBuilder<FileUpdateTr
      */
     public FileUpdateTransaction setKeys(Key... keys) {
         var keyList = com.hedera.hashgraph.sdk.proto.KeyList.newBuilder();
-        for (Key key: keys) {
+        for (Key key : keys) {
             keyList.addKeys(key.toKeyProtobuf());
         }
         builder.setKeys(keyList);

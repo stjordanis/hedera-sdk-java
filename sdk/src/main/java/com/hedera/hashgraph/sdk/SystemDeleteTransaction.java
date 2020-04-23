@@ -3,15 +3,16 @@ package com.hedera.hashgraph.sdk;
 import com.hedera.hashgraph.sdk.proto.SystemDeleteTransactionBody;
 import com.hedera.hashgraph.sdk.proto.TimestampSeconds;
 import com.hedera.hashgraph.sdk.proto.TransactionBody;
-import org.threeten.bp.Instant;
+
+import java.time.Instant;
 
 /**
  * Delete a file or smart contract - can only be done with a Hedera admin.
- *
+ * <p>
  * When it is deleted, it immediately disappears from the system as seen by the user,
  * but is still stored internally until the expiration time, at which time it
  * is truly and permanently deleted.
- *
+ * <p>
  * Until that time, it can be undeleted by the Hedera admin.
  * When a smart contract is deleted, the cryptocurrency account within it continues
  * to exist, and is not affected by the expiration time here.
@@ -25,7 +26,7 @@ public final class SystemDeleteTransaction extends TransactionBuilder<SystemDele
 
     /**
      * Sets the file ID to delete.
-     *
+     * <p>
      * Mutually exclusive with {@link #setContractId(ContractId)}.
      *
      * @return {@code this}
@@ -37,7 +38,7 @@ public final class SystemDeleteTransaction extends TransactionBuilder<SystemDele
 
     /**
      * Sets the contract ID to delete.
-     *
+     * <p>
      * Mutually exclusive with {@link #setFileId(FileId)}.
      *
      * @return {@code this}

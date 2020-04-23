@@ -2,14 +2,13 @@ package com.hedera.hashgraph.sdk;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.hedera.hashgraph.sdk.proto.TransactionID;
-import java8.util.concurrent.CompletableFuture;
-import org.threeten.bp.Clock;
-import org.threeten.bp.Instant;
 
 import javax.annotation.Nullable;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
 
-import static java8.util.concurrent.CompletableFuture.completedFuture;
-import static java8.util.concurrent.CompletableFuture.failedFuture;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 
 /**
  * The client-generated ID for a transaction.
@@ -84,7 +83,9 @@ public final class TransactionId implements WithGetReceipt, WithGetRecord {
             .executeAsync(client)
             .thenCompose(receipt -> {
                 if (receipt.status != Status.Success) {
-                    return failedFuture(new HederaReceiptStatusException(this, receipt));
+                    var future = new CompletableFuture<TransactionReceipt>();
+                    future.completeExceptionally(new HederaReceiptStatusException(this, receipt));
+                    return future;
                 }
 
                 return completedFuture(receipt);

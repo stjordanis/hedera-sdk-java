@@ -4,11 +4,11 @@ import io.grpc.CallOptions;
 import io.grpc.MethodDescriptor;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.ClientCalls;
-import java8.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
 import static com.hedera.hashgraph.sdk.FutureConverter.toCompletableFuture;
 
@@ -55,7 +55,12 @@ public abstract class HederaExecutable<RequestT, ResponseT, O> extends Executabl
 
             if (error != null) {
                 // not a network failure, some other weirdness going on; just fail fast
-                return CompletableFuture.<O>failedFuture(error);
+
+                // JDK9+ has #failedFuture
+                var future = new CompletableFuture<O>();
+                future.completeExceptionally(error);
+
+                return future;
             }
 
             var responseStatus = mapResponseStatus(response);
@@ -77,9 +82,11 @@ public abstract class HederaExecutable<RequestT, ResponseT, O> extends Executabl
                 // request to hedera failed in a non-recoverable way
                 System.err.println("response status failed with " + responseStatus);
 
-                return CompletableFuture.<O>failedFuture(
-                    new HederaPreCheckStatusException(
-                        responseStatus, getTransactionId()));
+                // JDK9+ has #failedFuture
+                var future = new CompletableFuture<O>();
+                future.completeExceptionally(new HederaPreCheckStatusException(responseStatus, getTransactionId()));
+
+                return future;
             }
 
             // successful response from Hedera

@@ -1,6 +1,5 @@
 package com.hedera.hashgraph.sdk;
 
-import java8.util.stream.RefStreams;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -23,7 +23,7 @@ public class HbarTest {
     private final Hbar negativeFiftyHbar = new Hbar(-50);
 
     static Iterator<Arguments> getValueConversions() {
-        return RefStreams.of(
+        return Stream.of(
             Arguments.arguments(new BigDecimal(50_000_000), HbarUnit.Microbar),
             Arguments.arguments(new BigDecimal(50_000), HbarUnit.Millibar),
             Arguments.arguments(new BigDecimal(50), HbarUnit.Hbar),

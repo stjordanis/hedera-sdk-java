@@ -5,11 +5,11 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.errorprone.annotations.Var;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import java8.util.function.Consumer;
-import java8.util.function.Function;
-import org.threeten.bp.Duration;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,13 +36,10 @@ public final class Client implements AutoCloseable {
     Hbar maxTransactionFee = DEFAULT_MAX_QUERY_PAYMENT;
 
     Hbar maxQueryPayment = DEFAULT_MAX_TRANSACTION_FEE;
-
+    Duration requestTimeout = Duration.ofSeconds(30);
     private Map<AccountId, ManagedChannel> channels;
-
     @Nullable
     private Operator operator;
-
-    Duration requestTimeout = Duration.ofSeconds(30);
 
     Client(Map<AccountId, String> network) {
         var threadFactory = new ThreadFactoryBuilder()

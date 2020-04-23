@@ -2,9 +2,9 @@ package com.hedera.hashgraph.sdk;
 
 import com.google.common.base.MoreObjects;
 import com.hedera.hashgraph.sdk.proto.mirror.ConsensusTopicResponse;
-import org.threeten.bp.Instant;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 public final class MirrorTopicResponse {
     public final Instant consensusTimestamp;

@@ -2,23 +2,24 @@ package com.hedera.hashgraph.sdk;
 
 import com.hedera.hashgraph.sdk.proto.ContractUpdateTransactionBody;
 import com.hedera.hashgraph.sdk.proto.TransactionBody;
-import org.threeten.bp.Duration;
-import org.threeten.bp.Instant;
+
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * Modify a smart contract instance to have the given parameter values.
- *
+ * <p>
  * Any null field is ignored (left unchanged).
- *
+ * <p>
  * If only the contractInstanceExpirationTime is being modified, then no signature is
  * needed on this transaction other than for the account paying for the transaction itself.
- *
+ * <p>
  * But if any of the other fields are being modified, then it must be signed by the adminKey.
- *
+ * <p>
  * The use of adminKey is not currently supported in this API, but in the future will
  * be implemented to allow these fields to be modified, and also to make modifications
  * to the state of the instance.
- *
+ * <p>
  * If the contract is created with no admin key, then none of the fields can be
  * changed that need an admin signature, and therefore no admin key can ever be added.
  * So if there is no admin key, then things like the bytecode are immutable.
@@ -68,11 +69,11 @@ public final class ContractUpdateTransaction extends TransactionBuilder<Contract
 
     /**
      * Sets the ID of the account to which this account is proxy staked.
-     *
+     * <p>
      * If proxyAccountID is null, or is an invalid account, or is an account
      * that isn't a node, then this account is automatically proxy staked to a
      * node chosen by the network, but without earning payments.
-     *
+     * <p>
      * If the proxyAccountID account refuses to accept proxy staking, or if it is
      * not currently running a node, then it will behave as if proxyAccountID was null.
      *
@@ -95,7 +96,7 @@ public final class ContractUpdateTransaction extends TransactionBuilder<Contract
 
     /**
      * Sets the file ID of file containing the smart contract byte code.
-     *
+     * <p>
      * A copy will be made and held by the contract instance, and have the same expiration
      * time as the instance.
      *

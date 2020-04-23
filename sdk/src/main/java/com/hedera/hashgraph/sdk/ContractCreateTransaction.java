@@ -3,7 +3,8 @@ package com.hedera.hashgraph.sdk;
 import com.google.protobuf.ByteString;
 import com.hedera.hashgraph.sdk.proto.ContractCreateTransactionBody;
 import com.hedera.hashgraph.sdk.proto.TransactionBody;
-import org.threeten.bp.Duration;
+
+import java.time.Duration;
 
 /* Start a new smart contract instance. After the instance is created,
  * the ContractID for it is in the receipt.
@@ -58,10 +59,10 @@ public final class ContractCreateTransaction extends TransactionBuilder<Contract
 
     /**
      * Sets the file containing the smart contract byte code.
-     *
+     * <p>
      * A copy will be made and held by the contract instance, and have the same expiration time as
      * the instance.
-     *
+     * <p>
      * The file must be the ASCII hexadecimal representation of the smart contract bytecode.
      *
      * @return {@code this}
@@ -108,10 +109,10 @@ public final class ContractCreateTransaction extends TransactionBuilder<Contract
 
     /**
      * Sets the ID of the account to which this account is proxy staked.
-     *
+     * <p>
      * If proxyAccountID is null, or is an invalid account, or is an account that isn't a node,
      * then this account is automatically proxy staked to a node chosen by the network, but without earning payments.
-     *
+     * <p>
      * If the proxyAccountID account refuses to accept proxy staking , or if it is not currently running a node,
      * then it will behave as if  proxyAccountID was null.
      *

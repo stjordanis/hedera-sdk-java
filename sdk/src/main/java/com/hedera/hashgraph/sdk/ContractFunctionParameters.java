@@ -2,11 +2,9 @@ package com.hedera.hashgraph.sdk;
 
 import com.google.errorprone.annotations.Var;
 import com.google.protobuf.ByteString;
-import java8.util.J8Arrays;
-import java8.util.stream.Collectors;
-import java8.util.stream.IntStream;
-import java8.util.stream.IntStreams;
-import java8.util.stream.Stream;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import org.bouncycastle.util.encoders.DecoderException;
 import org.bouncycastle.util.encoders.Hex;
 
@@ -224,7 +222,7 @@ public final class ContractFunctionParameters {
      * @throws NullPointerException if any value in `strings` is null
      */
     public ContractFunctionParameters addStringArray(String[] strings) {
-        List<ByteString> byteStrings = J8Arrays.stream(strings)
+        List<ByteString> byteStrings = Arrays.stream(strings)
             .map(ContractFunctionParameters::encodeString)
             .collect(Collectors.toList());
 
@@ -248,7 +246,7 @@ public final class ContractFunctionParameters {
      * Add a parameter of type {@code bytes[]}, an array of byte-strings.
      */
     public ContractFunctionParameters addBytesArray(byte[][] param) {
-        List<ByteString> byteArrays = J8Arrays.stream(param)
+        List<ByteString> byteArrays = Arrays.stream(param)
             .map(ContractFunctionParameters::encodeBytes)
             .collect(Collectors.toList());
 
@@ -279,7 +277,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addBytes32Array(byte[][] param) {
         // array of fixed-size elements
-        Stream<ByteString> byteArrays = J8Arrays.stream(param)
+        Stream<ByteString> byteArrays = Arrays.stream(param)
             .map(ContractFunctionParameters::encodeBytes32);
 
         args.add(new Argument("bytes32[]", encodeArray(byteArrays), true));
@@ -341,7 +339,7 @@ public final class ContractFunctionParameters {
      * The implementation is wasteful as we must pad to 32-bytes to store 1 byte.
      */
     public ContractFunctionParameters addInt8Array(byte[] intArray) {
-        IntStream intStream = IntStreams.range(0, intArray.length).map(idx -> intArray[idx]);
+        IntStream intStream = IntStream.range(0, intArray.length).map(idx -> intArray[idx]);
 
         @Var ByteString arrayBytes = ByteString.copyFrom(
             intStream.mapToObj(i -> int256(i, 8))
@@ -359,7 +357,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addInt32Array(int[] intArray) {
         @Var ByteString arrayBytes = ByteString.copyFrom(
-            J8Arrays.stream(intArray).mapToObj(i -> int256(i, 32))
+            Arrays.stream(intArray).mapToObj(i -> int256(i, 32))
                 .collect(Collectors.toList()));
 
         arrayBytes = uint256(intArray.length, 32).concat(arrayBytes);
@@ -374,7 +372,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addInt64Array(long[] intArray) {
         @Var ByteString arrayBytes = ByteString.copyFrom(
-            J8Arrays.stream(intArray).mapToObj(i -> int256(i, 64))
+            Arrays.stream(intArray).mapToObj(i -> int256(i, 64))
                 .collect(Collectors.toList()));
 
         arrayBytes = uint256(intArray.length, 64).concat(arrayBytes);
@@ -392,7 +390,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addInt256Array(BigInteger[] intArray) {
         @Var ByteString arrayBytes = ByteString.copyFrom(
-            J8Arrays.stream(intArray).map(ContractFunctionParameters::int256)
+            Arrays.stream(intArray).map(ContractFunctionParameters::int256)
                 .collect(Collectors.toList()));
 
         arrayBytes = uint256(intArray.length, 256).concat(arrayBytes);
@@ -460,7 +458,7 @@ public final class ContractFunctionParameters {
      * The implementation is wasteful as we must pad to 32-bytes to store 1 byte.
      */
     public ContractFunctionParameters addUint8Array(byte[] intArray) {
-        IntStream intStream = IntStreams.range(0, intArray.length).map(idx -> intArray[idx]);
+        IntStream intStream = IntStream.range(0, intArray.length).map(idx -> intArray[idx]);
 
         @Var ByteString arrayBytes = ByteString.copyFrom(
             intStream.mapToObj(i -> uint256(i, 8))
@@ -481,7 +479,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addUint32Array(int[] intArray) {
         @Var ByteString arrayBytes = ByteString.copyFrom(
-            J8Arrays.stream(intArray).mapToObj(i -> uint256(i, 32))
+            Arrays.stream(intArray).mapToObj(i -> uint256(i, 32))
                 .collect(Collectors.toList()));
 
         arrayBytes = uint256(intArray.length, 32).concat(arrayBytes);
@@ -499,7 +497,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addUint64Array(long[] intArray) {
         @Var ByteString arrayBytes = ByteString.copyFrom(
-            J8Arrays.stream(intArray).mapToObj(i -> uint256(i, 64))
+            Arrays.stream(intArray).mapToObj(i -> uint256(i, 64))
                 .collect(Collectors.toList()));
 
         arrayBytes = uint256(intArray.length, 64).concat(arrayBytes);
@@ -520,7 +518,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addUint256Array(BigInteger[] intArray) {
         @Var ByteString arrayBytes = ByteString.copyFrom(
-            J8Arrays.stream(intArray).map(ContractFunctionParameters::uint256)
+            Arrays.stream(intArray).map(ContractFunctionParameters::uint256)
                 .collect(Collectors.toList()));
 
         arrayBytes = uint256(intArray.length, 256).concat(arrayBytes);
@@ -558,7 +556,7 @@ public final class ContractFunctionParameters {
      */
     public ContractFunctionParameters addAddressArray(String[] addresses) {
         ByteString addressArray = encodeArray(
-            J8Arrays.stream(addresses).map(a -> {
+            Arrays.stream(addresses).map(a -> {
                 byte[] address = decodeAddress(a);
                 checkAddressLen(address);
                 return leftPad32(ByteString.copyFrom(address));

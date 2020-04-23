@@ -15,7 +15,7 @@ import com.hedera.hashgraph.sdk.TopicUpdateTransaction;
 import com.hedera.hashgraph.sdk.Transaction;
 import com.hedera.hashgraph.sdk.TransactionId;
 
-import java8.util.J8Arrays;
+import java.util.Arrays;
 import io.github.cdimascio.dotenv.Dotenv;
 
 /**
@@ -64,7 +64,7 @@ class TopicWithAdminKeyExample {
         // Generate the initial keys that are part of the adminKey's thresholdKey.
         // 3 ED25519 keys part of a 2-of-3 threshold key.
         initialAdminKeys = new PrivateKey[3];
-        J8Arrays.setAll(initialAdminKeys, i -> PrivateKey.generate());
+        Arrays.setAll(initialAdminKeys, i -> PrivateKey.generate());
 
         KeyList thresholdKey = KeyList.withThreshold(2)
             .addAll(initialAdminKeys);
@@ -75,7 +75,7 @@ class TopicWithAdminKeyExample {
             .build(hapiClient);
 
         // Sign the transaction with 2 of 3 keys that are part of the adminKey threshold key.
-        J8Arrays.stream(initialAdminKeys, 0, 2).forEach(k -> {
+        Arrays.stream(initialAdminKeys, 0, 2).forEach(k -> {
             System.out.println("Signing ConsensusTopicCreateTransaction with key " + k);
             transaction.sign(k);
         });
@@ -91,7 +91,7 @@ class TopicWithAdminKeyExample {
         // Generate the new keys that are part of the adminKey's thresholdKey.
         // 4 ED25519 keys part of a 3-of-4 threshold key.
         PrivateKey[] newAdminKeys = new PrivateKey[4];
-        J8Arrays.setAll(newAdminKeys, i -> PrivateKey.generate());
+        Arrays.setAll(newAdminKeys, i -> PrivateKey.generate());
 
         KeyList thresholdKey = KeyList.withThreshold(3)
             .addAll(newAdminKeys);
@@ -103,13 +103,13 @@ class TopicWithAdminKeyExample {
             .build(hapiClient);
 
         // Sign with the initial adminKey. 2 of the 3 keys already part of the topic's adminKey.
-        J8Arrays.stream(initialAdminKeys, 0, 2).forEach(k -> {
+        Arrays.stream(initialAdminKeys, 0, 2).forEach(k -> {
             System.out.println("Signing ConsensusTopicUpdateTransaction with initial admin key " + k);
             transaction.sign(k);
         });
 
         // Sign with the new adminKey. 3 of 4 keys already part of the topic's adminKey.
-        J8Arrays.stream(newAdminKeys, 0, 3).forEach(k -> {
+        Arrays.stream(newAdminKeys, 0, 3).forEach(k -> {
             System.out.println("Signing ConsensusTopicUpdateTransaction with new admin key " + k);
             transaction.sign(k);
         });

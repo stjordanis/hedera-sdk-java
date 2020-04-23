@@ -1,12 +1,12 @@
 package com.hedera.hashgraph.sdk;
 
 import com.hedera.hashgraph.sdk.proto.TransactionBody;
-import java8.util.concurrent.CompletableFuture;
-import org.threeten.bp.Duration;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class TransactionBuilder<T extends TransactionBuilder<T>>
     extends Executable<TransactionId> {
@@ -14,7 +14,7 @@ public abstract class TransactionBuilder<T extends TransactionBuilder<T>>
     static final Duration DEFAULT_AUTO_RENEW_PERIOD = Duration.ofDays(90);
 
     // Default transaction duration
-    private static final Duration DEFAULT_TRANSACTION_VALID_DURATION = Duration.ofSeconds(120);
+    private static final Duration DEFAULT_TRANSACTION_VALID_DURATION = Duration.ofMinutes(2);
 
     private final TransactionBody.Builder bodyBuilder;
 

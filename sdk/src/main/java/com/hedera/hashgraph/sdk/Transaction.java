@@ -13,9 +13,8 @@ import com.hedera.hashgraph.sdk.proto.TransactionBody;
 import com.hedera.hashgraph.sdk.proto.TransactionResponse;
 import com.hederahashgraph.service.proto.java.FreezeServiceGrpc;
 import io.grpc.MethodDescriptor;
-import java8.util.Lists;
-import java8.util.concurrent.CompletableFuture;
-import java8.util.function.Function;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,10 @@ public final class Transaction extends HederaExecutable<com.hedera.hashgraph.sdk
     public static Transaction fromBytes(byte[] bytes) throws InvalidProtocolBufferException {
         com.hedera.hashgraph.sdk.proto.Transaction inner = com.hedera.hashgraph.sdk.proto.Transaction.parseFrom(bytes);
 
-        return new Transaction(Lists.of(inner.toBuilder()));
+        var transactionBuilders = new ArrayList<com.hedera.hashgraph.sdk.proto.Transaction.Builder>(1);
+        transactionBuilders.add(inner.toBuilder());
+
+        return new Transaction(transactionBuilders);
     }
 
     private static MethodDescriptor<com.hedera.hashgraph.sdk.proto.Transaction, TransactionResponse> getMethodDescriptorForSystemDelete(SystemDeleteTransactionBody.IdCase idCase) {

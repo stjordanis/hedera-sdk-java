@@ -5,10 +5,6 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
-import java8.util.concurrent.CompletableFuture;
-import java8.util.function.BiConsumer;
-import java8.util.function.Consumer;
-import org.threeten.bp.Duration;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
@@ -18,11 +14,15 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static com.squareup.javapoet.MethodSpec.methodBuilder;
 import static com.squareup.javapoet.TypeSpec.interfaceBuilder;
@@ -37,6 +37,7 @@ public class FunctionalExecutableProcessor extends AbstractProcessor {
 
         var clientClazz = ClassName.get(packageName, "Client");
         var preCheckStatusException = ClassName.get(packageName, "HederaPreCheckStatusException");
+        var delayerClazz = ClassName.get(packageName, "Delayer");
 
         for (var element : roundEnv.getElementsAnnotatedWith(FunctionalExecutable.class)) {
             var annotation = element.getAnnotation(FunctionalExecutable.class);
@@ -88,10 +89,10 @@ public class FunctionalExecutableProcessor extends AbstractProcessor {
                 .addParameter(Duration.class, "timeout")
                 .addParameter(biCallbackTy, "callback")
                 .addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
-                .addStatement("$L (client)" +
-                        ".orTimeout(timeout.toMillis(), $T.MILLISECONDS)" +
+                .addStatement("$L.orTimeout($L (client)," +
+                        "timeout.toMillis(), $T.MILLISECONDS)" +
                         ".whenComplete(callback)",
-                    methodAsyncName, TimeUnit.class)
+                    delayerClazz, methodAsyncName, TimeUnit.class)
                 .returns(void.class)
                 .build();
 
@@ -110,13 +111,13 @@ public class FunctionalExecutableProcessor extends AbstractProcessor {
                 .addParameter(outCallbackTy, "onSuccess")
                 .addParameter(errCallbackTy, "onFailure")
                 .addModifiers(Modifier.DEFAULT, Modifier.PUBLIC)
-                .addStatement("$L (client)" +
-                        ".orTimeout(timeout.toMillis(), $T.MILLISECONDS)" +
+                .addStatement("$L.orTimeout($L (client)" +
+                        ",timeout.toMillis(), $T.MILLISECONDS)" +
                         ".whenComplete((output, error) -> {" +
                         "if (error != null) { onFailure.accept(error); }" +
                         "else { onSuccess.accept(output); }" +
                         "})",
-                    methodAsyncName, TimeUnit.class)
+                    delayerClazz, methodAsyncName, TimeUnit.class)
                 .returns(void.class)
                 .build();
 

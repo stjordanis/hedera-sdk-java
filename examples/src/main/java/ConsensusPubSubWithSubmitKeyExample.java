@@ -16,7 +16,7 @@ import com.hedera.hashgraph.sdk.TopicId;
 import com.hedera.hashgraph.sdk.TransactionId;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import org.threeten.bp.Instant;
+import java.time.Instant;
 
 /**
  * An example of an HCS topic that utilizes a submitKey to limit who can submit messages on the topic.

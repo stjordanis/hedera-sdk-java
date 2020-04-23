@@ -9,11 +9,11 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java8.util.concurrent.CompletableFuture;
-import java8.util.function.Consumer;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 // Converts between ListenableFuture (Guava) and CompletableFuture (StreamSupport).
-// https://github.com/lukas-krecan/future-converter/blob/master/java8-guava/src/main/java/net/javacrumbs/futureconverter/java8guava/FutureConverter.java#L28
+// https://github.com/lukas-krecan/future-converter/blob/master/java-guava/src/main/java/net/javacrumbs/futureconverter/javaguava/FutureConverter.java#L28
 final class FutureConverter {
     private FutureConverter() {}
 
@@ -140,7 +140,7 @@ final class FutureConverter {
         }
     }
 
-    // https://github.com/lukas-krecan/future-converter/blob/master/java8-common/src/main/java/net/javacrumbs/futureconverter/java8common/Java8FutureUtils.java
+    // https://github.com/lukas-krecan/future-converter/blob/master/java-common/src/main/java/net/javacrumbs/futureconverter/javacommon/Java8FutureUtils.java
     private static class Java8FutureUtils {
         public static <T> CompletableFuture<T> createCompletableFuture(ValueSource<T> valueSource) {
             if (valueSource instanceof CompletableFutureBackedValueSource) {

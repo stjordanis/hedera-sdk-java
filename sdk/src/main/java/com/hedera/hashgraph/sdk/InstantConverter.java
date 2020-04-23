@@ -2,10 +2,12 @@ package com.hedera.hashgraph.sdk;
 
 import com.hedera.hashgraph.sdk.proto.Timestamp;
 import com.hedera.hashgraph.sdk.proto.TimestampSeconds;
-import org.threeten.bp.Instant;
+
+import java.time.Instant;
 
 final class InstantConverter {
-    private InstantConverter() {}
+    private InstantConverter() {
+    }
 
     static Instant fromProtobuf(Timestamp timestamp) {
         return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
@@ -17,8 +19,8 @@ final class InstantConverter {
 
     static Timestamp toProtobuf(Instant instant) {
         return Timestamp.newBuilder()
-                .setSeconds(instant.getEpochSecond())
-                .setNanos(instant.getNano())
-                .build();
+            .setSeconds(instant.getEpochSecond())
+            .setNanos(instant.getNano())
+            .build();
     }
 }

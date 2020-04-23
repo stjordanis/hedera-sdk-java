@@ -10,13 +10,13 @@ import com.hedera.hashgraph.sdk.proto.ResponseType;
 import com.hedera.hashgraph.sdk.proto.Transaction;
 import com.hedera.hashgraph.sdk.proto.TransactionBody;
 import io.grpc.MethodDescriptor;
-import java8.util.concurrent.CompletableFuture;
-import org.threeten.bp.Instant;
 
 import javax.annotation.Nullable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class QueryBuilder<O, T extends QueryBuilder<O, T>> extends HederaExecutable<Query, Response, O> implements WithGetCost {
     private final Query.Builder builder;
@@ -113,11 +113,15 @@ public abstract class QueryBuilder<O, T extends QueryBuilder<O, T>> extends Hede
                     var maxCost = MoreObjects.firstNonNull(maxQueryPayment, client.maxQueryPayment);
 
                     if (cost.compareTo(maxCost) > 0) {
-                        return CompletableFuture.failedFuture(new MaxQueryPaymentExceededException(
+                        // NOTE: JDK9+ has #failedFuture
+                        var future = new CompletableFuture<Hbar>();
+                        future.completeExceptionally(new MaxQueryPaymentExceededException(
                             this,
                             cost,
                             maxCost
                         ));
+
+                        return future;
                     }
 
                     return CompletableFuture.completedFuture(cost);

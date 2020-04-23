@@ -12,7 +12,7 @@ import com.hedera.hashgraph.sdk.Hbar;
 import com.hedera.hashgraph.sdk.PrivateKey;
 import com.hedera.hashgraph.sdk.TransactionId;
 import org.junit.jupiter.api.Test;
-import org.threeten.bp.Duration;
+import java.time.Duration;
 
 import java.util.Objects;
 
