@@ -14,15 +14,14 @@ import com.hedera.hashgraph.sdk.HederaPreCheckStatusException;
 import com.hedera.hashgraph.sdk.PrivateKey;
 
 import com.google.protobuf.ByteString;
-import io.github.cdimascio.dotenv.Dotenv;
 
 /** Get the network address book for inspecting the node public keys, among other things */
 public final class GetAddressBookExample {
 
     // see `.env.sample` in the repository root for how to specify these values
     // or set environment variables with the same names
-    private static final AccountId OPERATOR_ID = AccountId.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_ID")));
-    private static final PrivateKey OPERATOR_KEY = PrivateKey.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_KEY")));
+    private static final AccountId OPERATOR_ID = AccountId.fromString(Objects.requireNonNull(System.getenv("OPERATOR_ID")));
+    private static final PrivateKey OPERATOR_KEY = PrivateKey.fromString(Objects.requireNonNull(System.getenv("OPERATOR_KEY")));
 
     private GetAddressBookExample() { }
 

@@ -17,7 +17,6 @@ import com.hedera.hashgraph.sdk.Transaction;
 import com.hedera.hashgraph.sdk.TransactionId;
 
 import java8.util.J8Arrays;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import javax.annotation.Nullable;
 
@@ -52,9 +51,9 @@ class TopicWithAdminKeyExample {
 
     private void setupHapiClient() {
         // Transaction payer's account ID and ED25519 private key.
-        AccountId payerId = AccountId.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_ID")));
+        AccountId payerId = AccountId.fromString(Objects.requireNonNull(System.getenv("OPERATOR_ID")));
         PrivateKey payerPrivateKey =
-            PrivateKey.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_KEY")));
+            PrivateKey.fromString(Objects.requireNonNull(System.getenv("OPERATOR_KEY")));
 
         // Interface used to publish messages on the HCS topic.
         hapiClient = Client.forTestnet();

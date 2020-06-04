@@ -11,7 +11,6 @@ import com.hedera.hashgraph.sdk.KeyList;
 import com.hedera.hashgraph.sdk.PrivateKey;
 import com.hedera.hashgraph.sdk.TransactionId;
 import com.hedera.hashgraph.sdk.TransactionReceipt;
-import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -21,8 +20,8 @@ public final class CreateAccountThresholdKeyExample {
 
     // see `.env.sample` in the repository root for how to specify these values
     // or set environment variables with the same names
-    private static final AccountId OPERATOR_ID = AccountId.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_ID")));
-    private static final PrivateKey OPERATOR_KEY = PrivateKey.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_KEY")));
+    private static final AccountId OPERATOR_ID = AccountId.fromString(Objects.requireNonNull(System.getenv("OPERATOR_ID")));
+    private static final PrivateKey OPERATOR_KEY = PrivateKey.fromString(Objects.requireNonNull(System.getenv("OPERATOR_KEY")));
 
     private CreateAccountThresholdKeyExample() {
     }

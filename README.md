@@ -59,12 +59,13 @@ $ ./gradlew integrationTest -POPERATOR_ID="<shard.realm.num>" -POPERATOR_KEY="<P
 
 ### Example
 
-Requires `OPERATOR_ID` and `OPERATOR_KEY` to be in the environment. Integration tests run against
-the Hedera test network.
+Most examples require `OPERATOR_ID` and `OPERATOR_KEY` to be in the environment. Some examples also
+require `MIRROR_NODE_ADDRESS`. Examples are run against the Hedera test network.
 
 ```sh
-$ export OEPRATOR_ID="..."
+$ export OPERATOR_ID="..."
 $ export OPERATOR_KEY="..."
+$ export MIRROR_NODE_ADDRESS="..."
 
 $ ./gradlew -q example:run<NameOfExample>
 $ ./gradlew -q example:runGenerateKey

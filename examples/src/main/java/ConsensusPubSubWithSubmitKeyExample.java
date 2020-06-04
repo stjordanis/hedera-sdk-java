@@ -15,7 +15,6 @@ import com.hedera.hashgraph.sdk.TopicCreateTransaction;
 import com.hedera.hashgraph.sdk.TopicId;
 import com.hedera.hashgraph.sdk.TransactionId;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.threeten.bp.Instant;
 
 /**
@@ -56,9 +55,9 @@ public class ConsensusPubSubWithSubmitKeyExample {
 
     private void setupHapiClient() {
         // Transaction payer's account ID and ED25519 private key.
-        AccountId payerId = AccountId.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_ID")));
+        AccountId payerId = AccountId.fromString(Objects.requireNonNull(System.getenv("OPERATOR_ID")));
         PrivateKey payerPrivateKey =
-            PrivateKey.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_KEY")));
+            PrivateKey.fromString(Objects.requireNonNull(System.getenv("OPERATOR_KEY")));
 
         // Interface used to publish messages on the HCS topic.
         hapiClient = Client.forTestnet();
@@ -70,7 +69,7 @@ public class ConsensusPubSubWithSubmitKeyExample {
 
     private void setupMirrorNodeClient() {
         // Interface used to subscribe to messages on the HCS topic.
-        mirrorNodeClient = new MirrorClient(Objects.requireNonNull(Dotenv.load().get("MIRROR_NODE_ADDRESS")));
+        mirrorNodeClient = new MirrorClient(Objects.requireNonNull(System.getenv("MIRROR_NODE_ADDRESS")));
     }
 
     /**
