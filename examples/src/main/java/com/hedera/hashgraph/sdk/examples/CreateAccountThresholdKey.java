@@ -10,6 +10,8 @@ import com.hedera.hashgraph.sdk.account.AccountBalanceQuery;
 import com.hedera.hashgraph.sdk.account.AccountCreateTransaction;
 import com.hedera.hashgraph.sdk.account.AccountId;
 import com.hedera.hashgraph.sdk.account.CryptoTransferTransaction;
+import com.hedera.hashgraph.sdk.crypto.KeyList;
+import com.hedera.hashgraph.sdk.crypto.PublicKey;
 import com.hedera.hashgraph.sdk.crypto.ThresholdKey;
 import com.hedera.hashgraph.sdk.crypto.ed25519.Ed25519PrivateKey;
 import com.hedera.hashgraph.sdk.crypto.ed25519.Ed25519PublicKey;
@@ -25,8 +27,12 @@ public final class CreateAccountThresholdKey {
 
     // see `.env.sample` in the repository root for how to specify these values
     // or set environment variables with the same names
-    private static final AccountId OPERATOR_ID = AccountId.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_ID")));
-    private static final Ed25519PrivateKey OPERATOR_KEY = Ed25519PrivateKey.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_KEY")));
+//    private static final AccountId OPERATOR_ID = AccountId.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_ID")));
+//    private static final Ed25519PrivateKey OPERATOR_KEY = Ed25519PrivateKey.fromString(Objects.requireNonNull(Dotenv.load().get("OPERATOR_KEY")));
+
+    private static final AccountId OPERATOR_ID = AccountId.fromString("0.0.1035");
+    private static final Ed25519PrivateKey OPERATOR_KEY = Ed25519PrivateKey.fromString("302e020100300506032b6570042204207ce25f7ac7a4fa7284efa8453f153922e16ede6004c36778d3870c93d5dfbee5");
+
 
     private CreateAccountThresholdKey() { }
 
@@ -37,8 +43,14 @@ public final class CreateAccountThresholdKey {
             keys.add(Ed25519PrivateKey.generate());
         }
 
+        KeyList keylist = new KeyList();
+
         final List<Ed25519PublicKey> pubKeys = keys.stream().map((key) -> key.publicKey)
             .collect(Collectors.toList());
+
+        for (int i = 0; i < 3; i++) {
+            keylist.add(pubKeys.get(i));
+        }
 
         System.out.println("private keys: \n"
             + keys.stream()
@@ -54,7 +66,7 @@ public final class CreateAccountThresholdKey {
 
         Transaction tx = new AccountCreateTransaction()
             // require 2 of the 3 keys we generated to sign on anything modifying this account
-            .setKey(new ThresholdKey(2).addAll(pubKeys))
+            .setKey(new KeyList().addAll(keylist))
             .setInitialBalance(new Hbar(10))
             .build(client);
 
@@ -73,8 +85,6 @@ public final class CreateAccountThresholdKey {
             // To manually sign, you must explicitly build the Transaction
             .build(client)
             // we sign with 2 of the 3 keys
-            .sign(keys.get(0))
-            .sign(keys.get(1))
             .execute(client);
 
         // (important!) wait for the transfer to go to consensus
